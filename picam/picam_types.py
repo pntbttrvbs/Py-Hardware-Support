@@ -330,14 +330,16 @@ PicamModel = {
     "NirvanaSTSeries": 1300,
     "NirvanaST640": 1301,
     "NirvanaLNSeries": 1100,
-    "NirvanaLN640": 1101
+    "NirvanaLN640": 1101,
+    "Sophia": 1813
 }
 PicamModelLookup = dict(zip(PicamModel.values(), PicamModel.keys()))
 
 PicamComputerInterface = {
     "Usb2": 1,
     "1394A": 2,
-    "GigabitEthernet": 3
+    "GigabitEthernet": 3,
+    "USB3": 4
 }
 PicamComputerInterfaceLookup = dict(zip(PicamComputerInterface.values(), PicamComputerInterface.keys()))
 
