@@ -91,7 +91,7 @@ Here is some example code showing the necessary parameters to get 1 kHz readout 
 import os
 import ctypes
 import numpy as np
-from picam_types import *
+from picam.picam_types import *
 
 
 # ##########################################################################################################
@@ -276,6 +276,22 @@ class picam():
         return id
 
     # prints a list of parameters that are available
+    def getAllCameraParameters(self):
+        """Returns a dictionary of all camera parameters.
+        """
+        parameter_array = ptr(piint())
+        parameter_count = piint()
+        self.lib.Picam_GetParameters(self.cam, ptr(parameter_array), ptr(parameter_count))
+        settings = {}
+
+        for i in range(parameter_count.value):
+
+            current = self.getParameter(PicamParameterLookup[parameter_array[i]])
+            settings[PicamParameterLookup[parameter_array[i]]] = current
+
+        self.lib.Picam_DestroyParameters(parameter_array)
+        return settings
+
     def printAvailableParameters(self):
         """Prints an overview over the parameters to stdout that are available for the current camera and their limits.
         """
@@ -326,10 +342,13 @@ class picam():
             elif PicamConstraintTypeLookup[contype.value] == "Modulations":
                 constraint = "N.A."
 
+            current = self.getParameter(PicamParameterLookup[parameter_array[i]])
+
             # print infos
             print (PicamParameterLookup[parameter_array[i]])
             print (" value access:", readable)
             print (" allowed values:", constraint)
+            print (" current value:", current)
             print ("\n")
 
         self.lib.Picam_DestroyParameters(parameter_array)
